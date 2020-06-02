@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShortURL</title>
+</head>
+<body>
+    <form action="{{ url_for('index') }}", method='POST'>
+        <input type="text" name="originalURL" id="originalURL" placeholder="Enter URL">
+        <input type="submit" name="submit" value="Shorten">
+    </form>
+    <h1>{{originalURL}}</h1>
+    <h1>{{shortURL}}</h1>
+</body>
+</html>
