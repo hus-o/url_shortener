@@ -4,7 +4,7 @@ from app.model import URL
 import random
 import base62
 
-# db.create_all()
+db.create_all()
 
 @app.route("/", methods=["GET"])
 def index():
