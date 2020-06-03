@@ -1,25 +1,44 @@
-from flask import render_template, request
+from flask import render_template, request, redirect, url_for
 from app import app, db
-from app.model import URLs
+from app.model import URL
+import random
+import base62
 
-db.create_all()
+# db.create_all()
 
-@app.route("/", methods=["GET","POST"])
+@app.route("/", methods=["GET"])
 def index():
-    if request.method == "POST":
-        originalURL = request.form.get("originalURL")
-        # print("orig url exists",db.session.query(URLs).filter(URLs.url == originalURL).one())
-        # input("check print")
-        db.session.add(originalURL)
-        db.session.commit()
-        # server-side
-            # add originalUrl to database
-            # get primary key and encode to shortURL 
-            # add shortURL to field in database
-            # return shortURL to client
-        
-        shortURL = "1"
-        return render_template("index.html", originalURL=originalURL, shortURL=shortURL)
-        
     return render_template("index.html")
 
+@app.route("/shortUrl", methods=["POST"])
+def submitUrl():
+        longURL = request.form.get("originalURL")
+        
+        returned_URL= db.session.query(URL).filter(URL.long_URL==longURL).first()
+        #check if long url in db
+        if returned_URL == None:
+            '''
+            rationale:
+                -   strings are added to the database in the order that they come from respective clients
+                -   the string is first added to the db and then the id is reteirved to make an short url from it using the base62 module
+                    it is done this way because:
+                    -   we want to make sure that there are no race conditions; each url must be assigned a   
+            '''            
+            BIG_NUMBER=100000000000000 # to make the urls longer
+
+            URL_object= URL(long_URL=longURL) # add longURL to database
+            db.session.add(URL_object) # add to session 
+            db.session.commit() # commit to database
+    
+            short_URL=base62.encode(URL_object.id+BIG_NUMBER) # create short url
+            
+            URL_object.short_URL=short_URL # update the recently created url object so that it now has a shortUrl
+            db.session.commit() # commit to teh url database
+
+            print("new short url", URL_object.short_URL)        
+        
+        else:
+            print("existing short url:", returned_URL.short_URL)
+        
+        return redirect(url_for('index'))
+        

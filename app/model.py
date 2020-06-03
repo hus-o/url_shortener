@@ -1,9 +1,10 @@
 from app import db
 
 
-class URLs(db.Model):
+class URL(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    url = db.Column(db.String(), unique=True, nullable=False)
-
+    long_URL = db.Column(db.String(), unique=True, nullable=True)
+    short_URL = db.Column(db.String(), unique=True, nullable=True)
+    
     def __repr__(self):
         return '<ID {}>'.format(self.id)
