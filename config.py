@@ -9,6 +9,7 @@ class Config(object):
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    ENV = "Development"
 
 class TestingConfig(Config):
     TESTING = True
