@@ -7,7 +7,9 @@ Before running please install pipenv: [https://pypi.org/project/pipenv/]
 After repo is cloned, run these commands in the project directory:
 
 ```pipenv install```
+
 ```pipenv shell```
+
 ```flask run```
 
 Note: You may need to set the FLASK_APP as app and FLASK_ENV as development BEFORE running "flask run", discussed here [https://flask.palletsprojects.com/en/1.1.x/cli/]
